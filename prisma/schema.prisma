@@ -1,0 +1,153 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  name      String
+  role      Role       @default(STUDENT)
+  avatar    String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Student fields
+  grade     Int?       // 1-6 for students
+  school    String?
+  totalStars Int @default(0)
+  
+  // Relations
+  studentProgress  StudentProgress[]
+  badges          Badge[]
+  achievements    Achievement[]
+  certificateHistory CertificateHistory[]
+  
+  // Teacher/Parent relations
+  monitoredStudents MonitoredStudent[] @relation("ParentStudents")
+  teachers          MonitoredStudent[] @relation("StudentTeachers")
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  PARENT
+}
+
+model StudentProgress {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  grade     Int        // 1-6
+  class     String     // e.g., "Class1", "Class2"
+  
+  // Progress tracking
+  questionsAnswered   Int @default(0)
+  correctAnswers      Int @default(0)
+  totalScore          Int @default(0)
+  averageScore        Float @default(0)
+  
+  // Material completion
+  materialsCompleted  String[] // Array of material IDs completed
+  currentMaterial     String?
+  
+  // Stars and rewards
+  starsEarned         Int @default(0)
+  
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  
+  @@unique([userId, grade])
+}
+
+model Badge {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  badgeType String     // e.g., "first_correct", "perfect_score", "streak_10"
+  badgeName String
+  description String?
+  icon      String?    // emoji or icon URL
+  
+  earnedAt  DateTime   @default(now())
+}
+
+model Achievement {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title     String
+  description String?
+  icon      String?
+  grade     Int?       // Which grade this achievement is from
+  
+  unlockedAt DateTime   @default(now())
+}
+
+model MonitoredStudent {
+  id        String     @id @default(cuid())
+  
+  studentId String
+  student   User       @relation("ParentStudents", fields: [studentId], references: [id], onDelete: Cascade)
+  
+  teacherId String
+  teacher   User       @relation("StudentTeachers", fields: [teacherId], references: [id], onDelete: Cascade)
+  
+  addedAt   DateTime   @default(now())
+  
+  @@unique([studentId, teacherId])
+}
+
+model CertificateHistory {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  grade     Int        // 1-6
+  certificateId String @default(cuid())
+  certificateUrl String?
+  
+  earnedAt  DateTime   @default(now())
+}
+
+model Leaderboard {
+  id        String     @id @default(cuid())
+  userId    String
+  username  String
+  grade     Int        // 1-6
+  score     Int
+  stars     Int
+  
+  updatedAt DateTime   @updatedAt
+  
+  @@unique([userId, grade])
+  @@index([grade, score])
+}
+
+model GameQuestion {
+  id        String     @id @default(cuid())
+  grade     Int        // 1-6
+  class     String     // "Class1", "Class2", etc.
+  material  String     // "addition", "multiplication", etc.
+  
+  question  String
+  options   String[]
+  correctAnswer String
+  difficulty Int       // 1-5
+  
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  
+  @@index([grade, class])
+}

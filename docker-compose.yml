@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://mathuser:mathpassword@db:5432/math_adventure_sd
+      - NEXT_PUBLIC_API_URL=http://localhost:3000
+    depends_on:
+      - db
+    networks:
+      - math-network
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=mathuser
+      - POSTGRES_PASSWORD=mathpassword
+      - POSTGRES_DB=math_adventure_sd
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - math-network
+
+  prisma-studio:
+    build: .
+    command: npx prisma studio
+    ports:
+      - "5555:5555"
+    environment:
+      - DATABASE_URL=postgresql://mathuser:mathpassword@db:5432/math_adventure_sd
+    depends_on:
+      - db
+    networks:
+      - math-network
+
+volumes:
+  postgres_data:
+
+networks:
+  math-network:
+    driver: bridge
