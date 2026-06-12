@@ -52,7 +52,7 @@ Website edukasi matematika interaktif yang dirancang khusus untuk siswa Sekolah 
 - Pengurangan
 - Membandingkan angka
 
-### Kelas 3: Harta Karun Bajak Laut 🏴‍☠️
+### Kelas 3: Merakit Robot Pintar 🤖
 
 - Perkalian
 - Pembagian

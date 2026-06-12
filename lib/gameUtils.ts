@@ -11,9 +11,9 @@ export const GAME_THEMES = {
     color: 'from-purple-300 to-pink-300',
   },
   class3: {
-    name: 'Harta Karun Bajak Laut',
-    emoji: '🏴',
-    color: 'from-blue-400 to-teal-400',
+    name: 'Merakit Robot Pintar',
+    emoji: '🤖',
+    color: 'from-slate-500 to-indigo-500',
   },
   class4: {
     name: 'Kota Matematika',

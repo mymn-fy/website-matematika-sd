@@ -26,6 +26,11 @@ export default function Class1Game() {
     let isUnique = false;
     let finalFruitIdx = -1;
 
+    // Reset memori soal agar tidak stuck
+    if (usedQuestions.current.size >= 30) {
+      usedQuestions.current.clear();
+    }
+
     while (!isUnique) {
       // Format visual menghitung buah (angka 1-10)
       correctAnswer = Math.floor(Math.random() * 10) + 1;
