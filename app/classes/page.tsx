@@ -7,8 +7,8 @@ import ClassCard from '@/components/ClassCard';
 const initialClassesData = [
   {
     number: 1,
-    theme: 'Petualangan Mencari Buah 🍎🍌',
-    emoji: '🍎🍌',
+    theme: 'Petualangan Mencari Buah 🍌',
+    emoji: '🍌',
     materials: ['Mengenal Angka 1-20', 'Penjumlahan Sederhana', 'Pengurangan Sederhana'],
     starsEarned: 0,
   },
@@ -55,7 +55,7 @@ export default function ClassesPage() {
   useEffect(() => {
     const clientSideData = initialClassesData.map((classItem) => ({
       ...classItem,
-      starsEarned: Math.floor(Math.random() * 100),
+      starsEarned: Number(localStorage.getItem(`class-${classItem.number}-progress`)) || 0,
     }));
     setClassesData(clientSideData);
   }, []);

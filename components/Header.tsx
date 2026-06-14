@@ -1,17 +1,33 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from './ui/Button';
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    if (!isDarkMode) {
-      document.body.classList.add('dark');
+  useEffect(() => {
+    // Cek tema yang tersimpan di localStorage atau preferensi sistem browser
+    const isDark = localStorage.getItem('theme') === 'dark' || 
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    setIsDarkMode(isDark);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
     } else {
-      document.body.classList.remove('dark');
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    if (newMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
     }
   };
 
@@ -33,9 +49,10 @@ const Header = () => {
           >
             {isDarkMode ? '☀️' : '🌙'}
           </button>
-          <Button variant="primary" size="sm" href="/profile">
+          {/* Tombol Masuk disembunyikan sementara */}
+          {/* <Button variant="primary" size="sm" href="/profile">
             Masuk
-          </Button>
+          </Button> */}
         </div>
       </div>
     </header>

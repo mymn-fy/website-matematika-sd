@@ -163,6 +163,17 @@ const GameInterface: React.FC<GameInterfaceProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Menyimpan progres ke localStorage setiap kali jawaban benar (skor bertambah)
+  useEffect(() => {
+    if (score > 0) {
+      const savedProgress = Number(localStorage.getItem(`class-${classNumber}-progress`)) || 0;
+      const newProgress = Math.min(100, score * 10); // Contoh: 1 soal benar = 10% progres
+      if (newProgress > savedProgress) {
+        localStorage.setItem(`class-${classNumber}-progress`, newProgress.toString());
+      }
+    }
+  }, [score, classNumber]);
+
   const getTargetKeys = (lvl: number) => lvl === 1 ? 5 : lvl === 2 ? 7 : 10;
 
   const loadNextQuestion = (forcedLevel?: number) => {
