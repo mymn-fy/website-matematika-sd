@@ -4,7 +4,7 @@ import { mockLeaderboard } from '@/lib/mockData';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { userId, grade, questionId, answer, isCorrect, stars } = body;
+    const { userId, grade, isCorrect, stars } = body;
 
     if (!userId || !grade) {
       return NextResponse.json(
