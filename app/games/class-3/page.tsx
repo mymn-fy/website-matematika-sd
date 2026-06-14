@@ -74,7 +74,7 @@ export default function Class3Game() {
 
         optionsSet.add(correctAnswer);
         while (optionsSet.size < 4) {
-          const wrong = ans + (Math.floor(Math.random() * 15) - 7);
+          const wrong: number = ans + (Math.floor(Math.random() * 15) - 7);
           if (wrong >= 0 && wrong !== ans) optionsSet.add(String(wrong));
         }
       }

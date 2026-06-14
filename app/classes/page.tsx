@@ -76,8 +76,8 @@ export default function ClassesPage() {
               theme={classItem.theme}
               emoji={classItem.emoji}
               materials={classItem.materials}
-              starsEarned={classItem.starsEarned}
-              totalStars={100}
+              progress={classItem.starsEarned}
+              totalProgress={100}
             />
           ))}
         </div>
