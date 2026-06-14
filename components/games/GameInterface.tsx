@@ -162,6 +162,7 @@ const GameInterface: React.FC<GameInterfaceProps> = ({
 
   useEffect(() => {
     loadNextQuestion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getTargetKeys = (lvl: number) => lvl === 1 ? 5 : lvl === 2 ? 7 : 10;
