@@ -11,6 +11,11 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  // Optimizations for Vercel
+  swcMinify: true,
+  productionBrowserSourceMaps: false,
+  compress: true,
+  poweredByHeader: false,
 };
 
 module.exports = nextConfig;

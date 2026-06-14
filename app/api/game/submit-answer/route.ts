@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { mockLeaderboard } from '@/lib/mockData';
 
 export async function POST(request: Request) {
   try {
@@ -15,72 +13,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Update student progress
-    const progress = await prisma.studentProgress.upsert({
-      where: {
-        userId_grade: {
-          userId,
-          grade,
-        },
-      },
-      update: {
-        questionsAnswered: {
-          increment: 1,
-        },
-        correctAnswers: isCorrect ? { increment: 1 } : undefined,
-        starsEarned: { increment: stars || 0 },
-      },
-      create: {
-        userId,
-        grade,
-        class: `Class${grade}`,
-        questionsAnswered: 1,
-        correctAnswers: isCorrect ? 1 : 0,
-        starsEarned: stars || 0,
-        materialsCompleted: [],
-        totalScore: isCorrect ? (stars || 0) : 0,
-      },
-    });
-
-    // Update user's total stars
-    if (isCorrect) {
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          totalStars: {
-            increment: stars || 0,
-          },
-        },
-      });
-    }
-
-    // Update leaderboard
-    await prisma.leaderboard.upsert({
-      where: {
-        userId_grade: {
-          userId,
-          grade,
-        },
-      },
-      update: {
-        stars: {
-          increment: stars || 0,
-        },
-      },
-      create: {
-        userId,
-        username: 'Player', // This would be updated with actual user name
-        grade,
-        score: progress.totalScore,
-        stars: progress.starsEarned,
-      },
-    });
+    // Mock response - simulate student progress update
+    const starsEarned = isCorrect ? (stars || 10) : 0;
+    
+    // Calculate total stars (simulated)
+    const leaderboardEntry = mockLeaderboard.find(entry => entry.userId === userId);
+    const totalStars = leaderboardEntry ? leaderboardEntry.stars + starsEarned : starsEarned;
 
     return NextResponse.json({
       success: true,
-      message: isCorrect ? 'Jawaban benar!' : 'Jawaban salah',
-      stars: stars || 0,
-      totalStars: progress.starsEarned,
+      message: isCorrect ? 'Jawaban benar! 🎉' : 'Jawaban salah, coba lagi! 💪',
+      stars: starsEarned,
+      totalStars: totalStars,
+      isCorrect,
+      celebration: isCorrect ? true : false,
     });
   } catch (error) {
     console.error('Error submitting answer:', error);

@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { mockLeaderboard } from '@/lib/mockData';
 
 export async function GET(request: Request) {
   try {
@@ -15,22 +13,23 @@ export async function GET(request: Request) {
       );
     }
 
-    const leaderboard = await prisma.leaderboard.findMany({
-      where: {
-        grade: parseInt(grade),
-      },
-      orderBy: [
-        { stars: 'desc' },
-        { score: 'desc' },
-      ],
-      take: 100,
-    });
+    const gradeNum = parseInt(grade);
+
+    // Filter mock leaderboard by grade and sort
+    const leaderboard = mockLeaderboard
+      .filter(entry => entry.grade === gradeNum)
+      .sort((a, b) => {
+        // Sort by stars descending, then by score descending
+        if (b.stars !== a.stars) return b.stars - a.stars;
+        return b.score - a.score;
+      });
 
     return NextResponse.json({
       success: true,
-      grade: parseInt(grade),
+      grade: gradeNum,
       leaderboard,
       totalEntries: leaderboard.length,
+      message: `Leaderboard for Grade ${gradeNum}`,
     });
   } catch (error) {
     console.error('Error fetching leaderboard:', error);
