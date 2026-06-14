@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Button from './ui/Button';
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
