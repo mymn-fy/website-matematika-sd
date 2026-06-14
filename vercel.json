@@ -3,12 +3,6 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "envPrefix": "NEXT_PUBLIC_",
-  "functions": {
-    "api/**/*.ts": {
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/api/:path*",
