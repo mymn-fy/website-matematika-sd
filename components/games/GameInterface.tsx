@@ -108,8 +108,6 @@ interface GameInterfaceProps {
 
 const GameInterface: React.FC<GameInterfaceProps> = ({
   classNumber,
-  gameName,
-  emoji,
   backgroundColor,
   gameMode = 'multiple-choice',
   rewards = {},
@@ -223,7 +221,6 @@ const GameInterface: React.FC<GameInterfaceProps> = ({
       } else if (gameMode === 'city-builder') {
         const newBuildings = buildingsCollected + 1;
         setBuildingsCollected(newBuildings);
-        const target = 10; // 10 buildings to collect
         
         setTimeout(() => {
           setShowBuildingAnimation(true);
@@ -232,7 +229,6 @@ const GameInterface: React.FC<GameInterfaceProps> = ({
       } else if (gameMode === 'math-detective') {
         const newClues = cluesCollected + 1;
         setCluesCollected(newClues);
-        const target = 5; // 5 clues to find
         
         setTimeout(() => {
           setShowClueAnimation(true);
@@ -241,7 +237,6 @@ const GameInterface: React.FC<GameInterfaceProps> = ({
       } else if (gameMode === 'space-mission') {
         const newPlanets = planetsCollected + 1;
         setPlanetsCollected(newPlanets);
-        const target = 8; // 8 planets to collect
         
         setTimeout(() => {
           setShowPlanetAnimation(true);
