@@ -8,9 +8,7 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverActions: true,
-  },
+
   // Optimizations for Vercel
   swcMinify: true,
   productionBrowserSourceMaps: false,
